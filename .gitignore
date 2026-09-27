@@ -1,0 +1,21 @@
+# Python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+
+# Database & uploads — real applicant data, don't commit
+backend/ca_dashboard.db
+backend/uploads/
+
+# Local backups
+backups/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Editor/OS
+.vscode/
+.DS_Store
+Thumbs.db
