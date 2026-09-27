@@ -9,7 +9,8 @@ import uuid
 from fastapi import UploadFile
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-UPLOAD_ROOT = os.path.join(BASE_DIR, "uploads")
+DATA_DIR = os.environ.get("DATA_DIR", BASE_DIR)
+UPLOAD_ROOT = os.path.join(DATA_DIR, "uploads")
 
 
 def _ext(filename: str) -> str:

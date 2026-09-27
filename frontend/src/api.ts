@@ -1,6 +1,6 @@
 import type { Applicant, College, CollegeDetail } from "./types";
 
-const BASE = "http://localhost:8000";
+const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 
 async function handle<T>(res: Response): Promise<T> {
