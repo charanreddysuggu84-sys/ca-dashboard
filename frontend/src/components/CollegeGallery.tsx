@@ -14,7 +14,7 @@ export default function CollegeGallery({
     const sorted = [...college.updates].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
-    const photos: { id: number; url: string; date: string; updateId: string }[] = [];
+    const photos: { id: string; url: string; date: string; updateId: string }[] = [];
     for (const u of sorted) {
       for (const p of u.photos) {
         photos.push({ id: p.id, url: p.url, date: u.created_at, updateId: u.id });

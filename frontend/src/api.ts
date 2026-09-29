@@ -2,33 +2,26 @@ import type { Applicant, College, CollegeDetail } from "./types";
 
 const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
-
 async function handle<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let message = `Request failed (${res.status})`;
-
     try {
       const body = await res.json();
       message = body.detail || message;
     } catch {
       // ignore
     }
-
     throw new Error(message);
   }
-
   return res.json();
 }
-
 
 export const api = {
   listColleges: (): Promise<College[]> =>
     fetch(`${BASE}/api/colleges`).then((r) => handle(r)),
 
-
   getCollege: (id: string): Promise<CollegeDetail> =>
     fetch(`${BASE}/api/colleges/${id}`).then((r) => handle(r)),
-
 
   createCollege: (payload: {
     name: string;
@@ -42,7 +35,6 @@ export const api = {
       body: JSON.stringify(payload),
     }).then((r) => handle(r)),
 
-
   updateIssueNotes: (
     collegeId: string,
     issue_notes: string
@@ -53,7 +45,6 @@ export const api = {
       body: JSON.stringify({ issue_notes }),
     }).then((r) => handle(r)),
 
-
   updateDescription: (
     collegeId: string,
     description: string
@@ -63,7 +54,6 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ description }),
     }).then((r) => handle(r)),
-
 
   mergeColleges: (
     sourceId: string,
@@ -78,7 +68,6 @@ export const api = {
       }),
     }).then((r) => handle(r)),
 
-
   addUpdate: (
     collegeId: string,
     status: string,
@@ -86,10 +75,8 @@ export const api = {
     photos: File[]
   ) => {
     const form = new FormData();
-
     form.append("status", status);
     form.append("text", text);
-
     photos.forEach((f) => form.append("photos", f));
 
     return fetch(`${BASE}/api/colleges/${collegeId}/updates`, {
@@ -98,13 +85,20 @@ export const api = {
     }).then((r) => handle(r));
   },
 
+  uploadProfilePhoto: (collegeId: string, file: File): Promise<College> => {
+    const form = new FormData();
+    form.append("file", file);
+
+    return fetch(`${BASE}/api/colleges/${collegeId}/photo`, {
+      method: "POST",
+      body: form,
+    }).then((r) => handle(r));
+  },
 
   listApplicants: (): Promise<Applicant[]> =>
     fetch(`${BASE}/api/applicants`).then((r) => handle(r)),
 
-
   // ---------- delete operations ----------
-
   deleteCollege: (collegeId: string): Promise<void> =>
     fetch(`${BASE}/api/colleges/${collegeId}`, {
       method: "DELETE",
@@ -113,7 +107,6 @@ export const api = {
         throw new Error(`Request failed (${r.status})`);
       }
     }),
-
 
   deleteUpdate: (
     collegeId: string,
@@ -126,7 +119,6 @@ export const api = {
         throw new Error(`Request failed (${r.status})`);
       }
     }),
-
 
   deletePhoto: (
     collegeId: string,
@@ -144,7 +136,6 @@ export const api = {
       }
     }),
 
-
   deleteApplicant: (applicantId: string): Promise<void> =>
     fetch(`${BASE}/api/applicants/${applicantId}`, {
       method: "DELETE",
@@ -155,9 +146,7 @@ export const api = {
     }),
 };
 
-
 export function assetUrl(path: string | null | undefined): string {
   if (!path) return "";
-
   return path.startsWith("http") ? path : `${BASE}${path}`;
 }
